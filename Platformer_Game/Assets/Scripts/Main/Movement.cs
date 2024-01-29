@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     private Animator animator; // Variable for the Animator component. [OPTIONAL]
 
     private bool isGrounded; // Variable that will check if character is on the ground.
+    private bool doubleJump = false;
+
     public GameObject groundCheckPoint; // The object through which the isGrounded check is performed.
     public float groundCheckRadius; // isGrounded check radius.
     public LayerMask groundLayer; // Layer wich the character can jump on.
@@ -30,13 +32,17 @@ public class Movement : MonoBehaviour
     // Update() is called every frame.
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) jumpPressed = true; // Checking on "Space" key pressed.
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            jumpPressed = true;
+        }
     }
 
     // Update using for physics calculations.
     void FixedUpdate()
     {
         float horizontalCharacter = Input.GetAxis("Horizontal");
+        animator.SetBool("isGrounded", isGrounded);
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.transform.position, groundCheckRadius, groundLayer); // Checking if character is on the ground.
         animator.SetFloat("speed",Mathf.Clamp(runSpeed * Mathf.Abs(horizontalCharacter),0,1));
         // Left/Right movement.
@@ -55,16 +61,21 @@ public class Movement : MonoBehaviour
         // Jumps.
         if (jumpPressed && isGrounded)
         {
+            jumpPressed = false;
+            animator.SetTrigger("jump");
             body.velocity = new Vector2(0, jumpForce); // Jump physics.
-            jumpPressed = false; // Returning initial value.
+            doubleJump = true;
         }
-
-
-        if (!isGrounded)
+        if (jumpPressed && doubleJump && !isGrounded)
         {
-            animator.enabled = false; // Turning off animation.
-            sr.sprite = jumpSprite; // Setting the sprite.
+            animator.SetTrigger("doubleJump");
+            body.velocity = new Vector2(0, body.velocity.y + jumpForce / 2); // Jump physics.
+            doubleJump = false;
+            jumpPressed = false;
         }
-        else animator.enabled = true; // Turning on animation.
+        if (isGrounded)
+        {
+            jumpPressed = false;
+        }
     }
 }
