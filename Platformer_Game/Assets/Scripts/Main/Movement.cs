@@ -21,6 +21,9 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer; // Layer wich the character can jump on.
 
     private bool jumpPressed = false; // Variable that will check is "Space" key is pressed.
+    private int jumpsRemaining = 2;
+    private int maxJumps =2;
+
 
     void Awake()
     {
@@ -28,23 +31,37 @@ public class Movement : MonoBehaviour
         sr = GetComponent<SpriteRenderer>(); // Setting the SpriteRenderer component.
         animator = GetComponent<Animator>(); // Setting the Animator component. [OPTIONAL]
     }
+    private void Start()
+    {
+        jumpsRemaining = maxJumps;
+        animator.SetInteger("jumpsRemaining", jumpsRemaining);
+    }
 
     // Update() is called every frame.
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            jumpPressed = true;
+            if (isGrounded)
+            {
+                jumpsRemaining = maxJumps;
+            }
+            Jump();
         }
     }
 
     // Update using for physics calculations.
     void FixedUpdate()
     {
+        Move();   
+    }
+
+    private void Move()
+    {
         float horizontalCharacter = Input.GetAxis("Horizontal");
-        animator.SetBool("isGrounded", isGrounded);
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.transform.position, groundCheckRadius, groundLayer); // Checking if character is on the ground.
-        animator.SetFloat("speed",Mathf.Clamp(runSpeed * Mathf.Abs(horizontalCharacter),0,1));
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("speed", Mathf.Clamp(runSpeed * Mathf.Abs(horizontalCharacter), 0, 1));
         // Left/Right movement.
         if (horizontalCharacter < 0)
         {
@@ -58,24 +75,24 @@ public class Movement : MonoBehaviour
         }
         else body.velocity = new Vector2(0, body.velocity.y);
 
-        // Jumps.
-        if (jumpPressed && isGrounded)
+   
+    }
+
+    private void Jump()
+    {
+
+        float jumpForceCalculated = jumpsRemaining == maxJumps ? jumpForce : jumpForce/1.4f + body.velocity.y;
+        if (jumpsRemaining == maxJumps)
         {
-            jumpPressed = false;
             animator.SetTrigger("jump");
-            body.velocity = new Vector2(0, jumpForce); // Jump physics.
-            doubleJump = true;
+            body.velocity = new Vector2(0, jumpForceCalculated); // Jump physics.
         }
-        if (jumpPressed && doubleJump && !isGrounded)
+        else if(jumpsRemaining == 1)
         {
             animator.SetTrigger("doubleJump");
-            body.velocity = new Vector2(0, body.velocity.y + jumpForce / 2); // Jump physics.
-            doubleJump = false;
-            jumpPressed = false;
+            body.velocity = new Vector2(0, jumpForceCalculated); // Jump physics.
         }
-        if (isGrounded)
-        {
-            jumpPressed = false;
-        }
+        jumpsRemaining--;
+        animator.SetInteger("jumpsRemaining", jumpsRemaining);
     }
 }
