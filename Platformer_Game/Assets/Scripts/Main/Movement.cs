@@ -23,7 +23,8 @@ public class Movement : MonoBehaviour
     private bool jumpPressed = false; // Variable that will check is "Space" key is pressed.
     private int jumpsRemaining = 2;
     private int maxJumps =2;
-
+    public Vector3 offset1;
+    public Vector2 offset2;
 
     void Awake()
     {
@@ -65,11 +66,15 @@ public class Movement : MonoBehaviour
         // Left/Right movement.
         if (horizontalCharacter < 0)
         {
+            bool check = Physics2D.OverlapBox(transform.position + offset1,offset2,0,groundLayer);
+            if (check) return;
             body.velocity = new Vector2(runSpeed * horizontalCharacter, body.velocity.y); // Move left physics.
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180, transform.eulerAngles.z); // Rotating the character object to the left.
         }
         else if (horizontalCharacter > 0)
         {
+            bool check = Physics2D.OverlapBox(transform.position+offset1,offset2, 0, groundLayer);
+            if (check) return;
             body.velocity = new Vector2(runSpeed * horizontalCharacter, body.velocity.y); // Move right physics.
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z); // Rotating the character object to the right.
         }
@@ -94,5 +99,13 @@ public class Movement : MonoBehaviour
         }
         jumpsRemaining--;
         animator.SetInteger("jumpsRemaining", jumpsRemaining);
+    }
+    public void Attack()
+    {
+        body.velocity = new Vector2(0, 10);
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + offset1,offset2);
     }
 }

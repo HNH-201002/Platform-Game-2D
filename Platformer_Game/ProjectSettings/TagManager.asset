@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - HitPoint
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -12,11 +14,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
+  - 
   - Player
-  - 
-  - 
-  - 
+  - HitPoint
+  - Enemy
+  - Ground
   - 
   - 
   - 

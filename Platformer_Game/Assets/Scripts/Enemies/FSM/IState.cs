@@ -6,6 +6,6 @@ public interface IState
 {
     public void OnEnter(StateController state);
     public void UpdateState(StateController state);
-    public void OnHurt();
-    public void OnExit(StateController state);
+    public void OnHurt(StateController state);
+    public void OnExit(StateController state,IState state1);
 }
