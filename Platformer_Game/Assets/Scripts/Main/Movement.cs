@@ -1,111 +1,125 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float runSpeed = 0.6f; // Running speed.
-    public float jumpForce = 2.6f; // Jump height.
+    public float runSpeed = 0.6f;
+    public float jumpForce = 2.6f;
+    public float doubleJumpMultiplier;
 
-    public Sprite jumpSprite; // Sprite that shows up when the character is not on the ground. [OPTIONAL]
+    private Rigidbody2D body;
+    private Animator animator; // Optional: Use only if animations are present
 
-    private Rigidbody2D body; // Variable for the RigidBody2D component.
-    private SpriteRenderer sr; // Variable for the SpriteRenderer component.
-    private Animator animator; // Variable for the Animator component. [OPTIONAL]
+    private bool isGrounded;
+    public Transform groundCheckPoint;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    public LayerMask checkLayer;
 
-    private bool isGrounded; // Variable that will check if character is on the ground.
-    private bool doubleJump = false;
-
-    public GameObject groundCheckPoint; // The object through which the isGrounded check is performed.
-    public float groundCheckRadius; // isGrounded check radius.
-    public LayerMask groundLayer; // Layer wich the character can jump on.
-
-    private bool jumpPressed = false; // Variable that will check is "Space" key is pressed.
-    private int jumpsRemaining = 2;
-    private int maxJumps =2;
-    public Vector3 offset1;
+    private int jumpsRemaining;
+    [SerializeField] private int MaxJumps = 1;
+    public Vector2 offset1; // Center of the box for checking obstacles
     public Vector2 offset2;
+    public Vector2 boxCheckSize; // Size of the box for checking obstacles
 
-    void Awake()
+    private void Awake()
     {
-        body = GetComponent<Rigidbody2D>(); // Setting the RigidBody2D component.
-        sr = GetComponent<SpriteRenderer>(); // Setting the SpriteRenderer component.
-        animator = GetComponent<Animator>(); // Setting the Animator component. [OPTIONAL]
+        body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>(); // Optional: Use only if animations are present
     }
+
     private void Start()
     {
-        jumpsRemaining = maxJumps;
-        animator.SetInteger("jumpsRemaining", jumpsRemaining);
+        jumpsRemaining = MaxJumps;
+        if (animator) animator.SetInteger("jumpsRemaining", jumpsRemaining);
     }
 
-    // Update() is called every frame.
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Jump"))
         {
-            if (isGrounded)
-            {
-                jumpsRemaining = maxJumps;
-            }
             Jump();
         }
     }
 
-    // Update using for physics calculations.
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        Move();   
+        CheckGrounded();
+        Move();
     }
 
     private void Move()
     {
-        float horizontalCharacter = Input.GetAxis("Horizontal");
-        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.transform.position, groundCheckRadius, groundLayer); // Checking if character is on the ground.
-        animator.SetBool("isGrounded", isGrounded);
-        animator.SetFloat("speed", Mathf.Clamp(runSpeed * Mathf.Abs(horizontalCharacter), 0, 1));
-        // Left/Right movement.
-        if (horizontalCharacter < 0)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        // Check if player is grounded and if there's an obstacle in front
+        if (!IsObstacle(horizontalInput))
         {
-            bool check = Physics2D.OverlapBox(transform.position + offset1,offset2,0,groundLayer);
-            if (check) return;
-            body.velocity = new Vector2(runSpeed * horizontalCharacter, body.velocity.y); // Move left physics.
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180, transform.eulerAngles.z); // Rotating the character object to the left.
+            body.velocity = new Vector2(runSpeed * horizontalInput, body.velocity.y);
+            if (horizontalInput != 0f)
+            {
+                transform.localScale = new Vector3(horizontalInput < 0 ? -1 : 1, 1, 1);
+            }
         }
-        else if (horizontalCharacter > 0)
-        {
-            bool check = Physics2D.OverlapBox(transform.position+offset1,offset2, 0, groundLayer);
-            if (check) return;
-            body.velocity = new Vector2(runSpeed * horizontalCharacter, body.velocity.y); // Move right physics.
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z); // Rotating the character object to the right.
-        }
-        else body.velocity = new Vector2(0, body.velocity.y);
 
-   
+        // Optional: Update animator parameters
+        if (animator)
+        {
+            animator.SetBool("isGrounded", isGrounded);
+            animator.SetFloat("speed", Mathf.Abs(body.velocity.x));
+        }
     }
 
     private void Jump()
     {
+        if (isGrounded || jumpsRemaining > 0)
+        {
+            float jumpVelocity = jumpForce;
+            if (!isGrounded)
+            {
+                jumpVelocity = doubleJumpMultiplier * 2; // Reduce the jump force for double jump
+                animator?.SetTrigger("doubleJump"); // Optional: Trigger double jump animation
+            }
+            else
+            {
+                animator?.SetTrigger("jump"); // Optional: Trigger jump animation
+            }
 
-        float jumpForceCalculated = jumpsRemaining == maxJumps ? jumpForce : jumpForce/1.4f + body.velocity.y;
-        if (jumpsRemaining == maxJumps)
-        {
-            animator.SetTrigger("jump");
-            body.velocity = new Vector2(0, jumpForceCalculated); // Jump physics.
+            body.velocity = new Vector2(body.velocity.x, jumpVelocity);
+            jumpsRemaining--;
+            if (animator) animator.SetInteger("jumpsRemaining", jumpsRemaining);
         }
-        else if(jumpsRemaining == 1)
+    }
+
+    private void CheckGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, groundLayer);
+        if (isGrounded)
         {
-            animator.SetTrigger("doubleJump");
-            body.velocity = new Vector2(0, jumpForceCalculated); // Jump physics.
+            jumpsRemaining = MaxJumps;
         }
-        jumpsRemaining--;
-        animator.SetInteger("jumpsRemaining", jumpsRemaining);
+    }
+
+    private bool IsObstacle(float horizontalInput)
+    {
+        if (horizontalInput == 0f) return false;
+
+        Vector2 direction = horizontalInput < 0 ? Vector2.left : Vector2.right;
+        Vector2 origin = (Vector2)transform.position + offset1 * direction;
+        RaycastHit2D hit = Physics2D.BoxCast(origin + offset2, boxCheckSize, 0, direction, 0.1f,checkLayer);
+
+        return hit.collider != null;
     }
     public void Attack()
     {
         body.velocity = new Vector2(0, 10);
     }
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position + offset1,offset2);
+        // Draw the boxcast used for obstacle detection
+        Gizmos.color = Color.red;
+        Vector2 originLeft = (Vector2)transform.position + offset1 * Vector2.left;
+        Vector2 originRight = (Vector2)transform.position + offset1 * Vector2.right;
+        Gizmos.DrawWireCube(originLeft + offset2, boxCheckSize);
+        Gizmos.DrawWireCube(originRight + offset2, boxCheckSize);
     }
 }

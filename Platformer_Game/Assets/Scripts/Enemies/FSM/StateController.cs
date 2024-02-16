@@ -40,7 +40,6 @@ public class StateController : MonoBehaviour
         {
             currentState.UpdateState(this);
         }
-        Debug.Log(currentState);
     }
     public void ChangeState(IState newState)
     {

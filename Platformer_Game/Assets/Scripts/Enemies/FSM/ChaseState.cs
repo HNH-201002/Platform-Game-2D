@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class ChaseState : IState
+public class ChaseState : MonoBehaviour, IState 
 {
     private bool isFacing;
     Vector2 direction = Vector2.left;
     float rotate = 180;
     float angle;
     float speed;
+    StateController state;
+    public bool check = false;
     public void OnEnter(StateController state)
     {
         state.speed = 3;
@@ -17,6 +20,7 @@ public class ChaseState : IState
     }
     public void UpdateState(StateController state)
     {
+        this.state = state;
         ChaseTarget(state);
     }
 
@@ -31,6 +35,7 @@ public class ChaseState : IState
     }
     private void ChaseTarget(StateController state)
     {
+        if (check) return; 
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(state.transform.position,state.radius, state.playerLayer);
         if (hitPlayer.Length > 0)
         {
@@ -44,9 +49,8 @@ public class ChaseState : IState
 
                 // Tính góc giữa hướng hiện tại của kẻ thù và hướng đến người chơi
                 angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                bool distance = Mathf.Abs(target.transform.position.x - state.transform.position.x) <= state.distanceToStopChase;
-                state.speed = distance ? 0 : speed;
-                state.animator.SetFloat("speed", Mathf.Clamp(state.speed, 0, 1));
+   
+                state.animator.SetFloat("speed", 1);
 
             }
             if (angle > -90)
@@ -64,6 +68,21 @@ public class ChaseState : IState
         else
         {
             OnExit(state,state.patrolState);
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            state.animator.SetFloat("speed", 0);
+            check = true;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            check = false;
         }
     }
 }

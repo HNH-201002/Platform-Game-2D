@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,51 +5,48 @@ public class HealthEnemy : MonoBehaviour
 {
     [SerializeField] private GameObject healthPoint;
     [SerializeField] private GameObject healthGameObject;
-    [SerializeField] private int healthCount = 0;
-    // Start is called before the first frame update
-    List<GameObject> gameObjects = new List<GameObject>();
-    GameObject heartObj;
+    [SerializeField] private int healthCount = 5;
+
+    private List<GameObject> gameObjects = new List<GameObject>();
+    private float countdown;
+    private const float HeartSpacing = 0.8f; // Spacing between hearts
+    private const float OffsetForTwo = 0.5f; // Additional offset when there are two hearts
+    private const float HurtCooldown = 0.2f; // Cooldown duration after getting hurt
+
     void Start()
     {
-        for (int i = -1; i < healthCount - 1; i++) 
+        Vector2 startPosition = healthPoint.transform.position;
+        float offset = healthCount == 2 ? OffsetForTwo : HeartSpacing / 2;
+
+        for (int i = 0; i < healthCount; i++)
         {
-            if (healthCount == 1)
-            {
-                heartObj = Instantiate(healthGameObject,
-                new Vector2(healthPoint.transform.position.x, healthPoint.transform.position.y),
-               Quaternion.identity);
-                heartObj.transform.parent = healthPoint.transform;
-            }
-            else if (healthCount == 2)
-            {
-                heartObj = Instantiate(healthGameObject,
-                 new Vector2(healthPoint.transform.position.x + i * 0.8f + 0.5f, healthPoint.transform.position.y),
-                Quaternion.identity);
-                heartObj.transform.parent = healthPoint.transform;
-            }
-            else
-            {
-                heartObj = Instantiate(healthGameObject,
-                new Vector2(healthPoint.transform.position.x + i * 0.8f, healthPoint.transform.position.y),
-                Quaternion.identity);
-                heartObj.transform.parent = healthPoint.transform;
-            }
-            //heartObj.SetActive(false);
+            Vector2 positionOffset = new Vector2(startPosition.x + (i - (healthCount / 2)) * HeartSpacing + offset, startPosition.y);
+            GameObject heartObj = Instantiate(healthGameObject, positionOffset, Quaternion.identity, healthPoint.transform);
+            // Uncomment the line below if you want to deactivate the health objects initially
+            // heartObj.SetActive(false);
             gameObjects.Add(heartObj);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (countdown > 0)
+        {
+            countdown -= Time.deltaTime;
+        }
     }
+
     public void Hurt()
     {
-        healthCount -= 1;
-        Debug.Log("healthcount" + healthCount);
-        Debug.Log("number of lists " + gameObjects);
-        gameObjects[healthCount].SetActive(false);
+        if (countdown > 0) return;
+
+        countdown = HurtCooldown;
+        if (healthCount > 0)
+        {
+            healthCount--;
+            gameObjects[healthCount].SetActive(false);
+        }
+
         if (healthCount <= 0)
         {
             Die();
