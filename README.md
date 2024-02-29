@@ -1,11 +1,10 @@
 # Name:  Blue Guy Adventure.
 ## Beta Version: 
-### PC : https://kingdom01.itch.io/blue-guy-adventure
-### Android :https://drive.google.com/file/d/1KbyyWq2tDXRgfdwR-bAjL3NOFAwoqe-T/view?usp=sharing
+### You can try it in here: https://kingdom01.itch.io/blue-guy-adventure
 ### Special Thanks To:
 * <a href="https://pixelfrog-assets.itch.io/">Pixel Frog</a> - For Awesome Free Game Assets
 * ...
-##### Nếu bạn thấy hữu ích thì có thể cho mình xin 1 star ⭐ ^^
+##### I hope you like it ^^
 🎮 
 #### FULL GAMEPLAY: 
 
@@ -22,9 +21,7 @@
 ![image](https://github.com/kingdomx01/Platform-Game-2D/assets/51502661/246a7a85-8fba-42fc-aaa5-2e2cd413735c)
 #### Level 3
 ![image](https://github.com/kingdomx01/Platform-Game-2D/assets/51502661/29e7347a-9648-40d5-9ba4-d1f2e4af6ef3)
-![image](https://github.com/kingdomx01/Platform-Game-2D/assets/51502661/797e9237-f693-4ce3-ab78-b7531c8a157f)
 
 #### Level 4
 ![image](https://github.com/kingdomx01/Platform-Game-2D/assets/51502661/455f6a6c-8c84-4863-b964-11e4f6fb890c)
 
-##### That's It, Tks for reading :D
