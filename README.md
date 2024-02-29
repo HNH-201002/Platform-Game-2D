@@ -1,7 +1,7 @@
 # Name:  Blue Guy Adventure.
 ## Beta Version: 
-###PC
-###Android :
+###PC : 
+###Android :https://drive.google.com/file/d/1KbyyWq2tDXRgfdwR-bAjL3NOFAwoqe-T/view?usp=sharing
 ###IOS :
 ### Special Thanks To:
 * <a href="https://pixelfrog-assets.itch.io/">Pixel Frog</a> - For Awesome Free Game Assets
