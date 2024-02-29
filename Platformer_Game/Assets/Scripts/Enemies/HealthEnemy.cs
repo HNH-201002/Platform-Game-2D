@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +14,8 @@ public class HealthEnemy : MonoBehaviour
     private const float HeartSpacing = 0.8f; // Spacing between hearts
     private const float OffsetForTwo = 0.5f; // Additional offset when there are two hearts
     private const float HurtCooldown = 0.2f; // Cooldown duration after getting hurt
-
+    private const string SOUNDNAME = "Hurt_Enemy";
+    public static Action OnEnemyDied;
     void Start()
     {
         Vector2 startPosition = healthPoint.transform.position;
@@ -22,8 +25,6 @@ public class HealthEnemy : MonoBehaviour
         {
             Vector2 positionOffset = new Vector2(startPosition.x + (i - (healthCount / 2)) * HeartSpacing + offset, startPosition.y);
             GameObject heartObj = Instantiate(healthGameObject, positionOffset, Quaternion.identity, healthPoint.transform);
-            // Uncomment the line below if you want to deactivate the health objects initially
-            // heartObj.SetActive(false);
             gameObjects.Add(heartObj);
         }
     }
@@ -45,6 +46,7 @@ public class HealthEnemy : MonoBehaviour
         {
             healthCount--;
             gameObjects[healthCount].SetActive(false);
+            SoundManager.Instance.PlaySound(SOUNDNAME);
         }
 
         if (healthCount <= 0)
@@ -55,6 +57,25 @@ public class HealthEnemy : MonoBehaviour
 
     private void Die()
     {
+        OnEnemyDied?.Invoke();
+        StartCoroutine(DelayBeforeDestroyObject());
+    }
+    private IEnumerator DelayBeforeDestroyObject()
+    {
+        if(GetComponent<StateController>() != null) { GetComponent<StateController>().enabled = false; }
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<Animator>().SetBool("Die",true);
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            // Add a small upward force to make the object jump
+            float jumpForce = 200f; // Adjust the force as needed
+            rb.AddForce(new Vector2(0, jumpForce));
+            rb.constraints = RigidbodyConstraints2D.None;
+            float rotationAmount = 20f; 
+            rb.angularVelocity = rotationAmount;
+        }
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 }

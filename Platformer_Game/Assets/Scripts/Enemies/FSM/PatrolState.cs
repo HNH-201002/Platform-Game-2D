@@ -1,86 +1,81 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
 
 public class PatrolState : MonoBehaviour,IState
 {
+    EnemyBase enemyBase = null;
+    float originalPosY;
     private bool isFacing;
-    Vector2 direction = Vector2.left;
-    float rotate = 180;
-    float countdown = 0;
+    public Vector3 offset1;
+
+    private bool isFlipping;
+    private float lastFlipTime;
+    private float flipCooldown = 0.5f;
+    public Vector2 boxCastSize = new Vector2(1f, 1f); // Default size of the box cast
+    public float boxCastDistance = 2f; // Default distance for the box cast
+    public float boxCastAngle = 0f;
     public void OnEnter(StateController state)
     {
         state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, 180, state.transform.eulerAngles.z);
+        enemyBase = state.GetComponent<EnemyBase>();
+        enemyBase.Set(state);
+       originalPosY = state.transform.position.y; 
     }
 
     public void UpdateState(StateController state)
     {
+        Vector2 direction = isFacing ? Vector2.left : Vector2.right;
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(state.transform.position, state.radius, state.playerLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(
+           state.transform.position + offset1, // Center of the box
+           boxCastSize, // Size of the box
+           boxCastAngle, // Angle of the box (in degrees)
+           direction, // Direction to cast the box
+           boxCastDistance, // Distance to cast the box
+           state.obstacleLayer // LayerMask to detect obstacles
+       );
+
+        if (!isFlipping)
+        {
+            if (Mathf.Abs(state.transform.position.x - state.originalPosition.x) >= state.distancePatrol)
+            {
+                Flip();
+            }
+            else
+            {
+                if (hit)
+                {
+                    if (hit.collider.name != state.gameObject.name)
+                    {
+                        Flip();
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (Time.time - lastFlipTime > flipCooldown)
+            {
+                isFlipping = false;
+            }
+        }
+
+
         if (hitPlayer.Length > 0)
         {
-            OnExit(state,state.chaseState);
-        }
-        if (countdown >= 0)
-        {
-            countdown -= Time.deltaTime;
-        }
-        if (state.typePatrol == StateController.TypePatrol.RotateDirectionAwayGround)
-        {
-            bool hitGround = Physics2D.Raycast(state.transform.position, direction, 1.5f, state.groundLayer);
-            Debug.DrawRay(state.transform.position, direction * 1.5f, Color.red);
-            RotateDirectionAwayGround(state, hitGround);
-        }
-        if (state.typePatrol == StateController.TypePatrol.RotateByDistance)
-        {
-            RotateByDistance(state);
-        }
-    }
-    void RotateDirectionAwayGround(StateController state, bool hitGround)
-    {
-        if (hitGround)
-        {
-            rotate = isFacing == true ? 180 : 0;
-            isFacing = !isFacing;
-        }
-        if (!isFacing)
-        {
-            state.body.velocity = new Vector2(state.speed, state.body.velocity.y);
+            OnExit(state, state.chaseState);
         }
         else
         {
-            state.body.velocity = new Vector2(-state.speed, state.body.velocity.y);
+            enemyBase.Patrol(isFacing, originalPosY);
         }
-        state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, rotate, state.transform.eulerAngles.z);
-        direction = isFacing ? Vector2.left : Vector2.right;
-        state.animator.SetFloat("speed", Mathf.Clamp(state.speed, 0, 1));
     }
-    private void RotateByDistance(StateController state)
+    void Flip()
     {
-        if (countdown > 0)
-        {
-            return;
-        }
-        if (Mathf.Abs(state.transform.position.x - state.originalPosition.x) >= state.distancePatrol)
-        {
-            rotate = isFacing == true ? 180 : 0;
-            isFacing = !isFacing;
-        }
-        if (!isFacing)
-        {
-            state.body.velocity = new Vector2(state.speed, state.body.velocity.y);
-        }
-        else
-        {
-            state.body.velocity = new Vector2(-state.speed, state.body.velocity.y);
-        }
-        state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, rotate, state.transform.eulerAngles.z);
-        direction = isFacing ? Vector2.left : Vector2.right;
-        state.animator.SetFloat("speed", Mathf.Clamp(state.speed, 0, 1));
-        countdown = 0.5f;
+        isFacing = !isFacing;
+        isFlipping = true;
+        lastFlipTime = Time.time;
     }
-
     public void OnExit(StateController state, IState state1)
     {
         state.ChangeState(state1);

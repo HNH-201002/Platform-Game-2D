@@ -1,26 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+﻿using UnityEngine;
+
 
 public class ChaseState : MonoBehaviour, IState 
 {
-    private bool isFacing;
-    Vector2 direction = Vector2.left;
-    float rotate = 180;
-    float angle;
-    float speed;
-    StateController state;
-    public bool check = false;
+    EnemyBase enemy;
     public void OnEnter(StateController state)
     {
-        state.speed = 3;
-        speed = state.speed;
+         enemy = state.GetComponent<EnemyBase>();
+         enemy.Set(state);
     }
     public void UpdateState(StateController state)
     {
-        this.state = state;
         ChaseTarget(state);
     }
 
@@ -35,54 +25,30 @@ public class ChaseState : MonoBehaviour, IState
     }
     private void ChaseTarget(StateController state)
     {
-        if (check) return; 
-        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(state.transform.position,state.radius, state.playerLayer);
-        if (hitPlayer.Length > 0)
+        Collider2D hitPlayer = Physics2D.OverlapCircle(state.transform.position, state.radius, state.playerLayer);
+        if (hitPlayer)
         {
-            state.body.velocity = new Vector2(state.speed, state.body.velocity.y);
-            state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, 0, state.transform.eulerAngles.z);
-
-            foreach (var target in hitPlayer)
+            if (Mathf.Abs(hitPlayer.transform.position.x - state.transform.position.x) <= 1.9f) 
             {
-                Vector2 direction = target.transform.position - state.transform.position;
-                direction.Normalize();
-
-                // Tính góc giữa hướng hiện tại của kẻ thù và hướng đến người chơi
-                angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-   
-                state.animator.SetFloat("speed", 1);
-
+                state.animator.SetFloat("speed", 0);
+                return;
             }
-            if (angle > -90)
+            Vector2 direction = (hitPlayer.transform.position - state.transform.position).normalized;
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            enemy.ChaseTarget(targetAngle);
+            state.animator.SetFloat("speed", state.GetChaseSpeed());
+            if (direction.x > 0)
             {
-                state.body.velocity = new Vector2(state.speed, state.body.velocity.y); // Move right physics.
                 state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, 180, state.transform.eulerAngles.z);
             }
-            else
+            else if (direction.x < 0)
             {
-                state.body.velocity = new Vector2(-state.speed, state.body.velocity.y);
                 state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, 0, state.transform.eulerAngles.z);
             }
-
         }
         else
         {
-            OnExit(state,state.patrolState);
-        }
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.transform.tag == "Player")
-        {
-            state.animator.SetFloat("speed", 0);
-            check = true;
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.transform.tag == "Player")
-        {
-            check = false;
+            OnExit(state, state.patrolState);
         }
     }
 }

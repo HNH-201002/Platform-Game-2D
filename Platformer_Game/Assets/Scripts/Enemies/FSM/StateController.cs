@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StateController : MonoBehaviour
@@ -12,15 +9,19 @@ public class StateController : MonoBehaviour
     }
     IState currentState;
 
-    public float speed = 2f;
-    public ChaseState chaseState = new ChaseState();
-    public PatrolState patrolState = new PatrolState();
-    public RunAwayState runAwayState = new RunAwayState();
+    [SerializeField] private EnemySO data;
+    private float speed;
+    private float chaseSpeed;
+    public ChaseState chaseState;
+    public PatrolState patrolState;
+    public RunAwayState runAwayState;
 
-    public Rigidbody2D body; // Variable for the RigidBody2D component.
-    public Animator animator; // Variable for the Animator component. [OPTIONAL]
+    public Rigidbody2D body; 
+    public Animator animator;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
+    public LayerMask obstacleLayer;
+
     public TypePatrol typePatrol;
     public Vector2 originalPosition;
     public float distancePatrol;
@@ -29,6 +30,18 @@ public class StateController : MonoBehaviour
 
     public GameObject leftPoint;
     public GameObject rightPoint;
+
+    private void Awake()
+    {
+        chaseState = new ChaseState();
+        patrolState = new PatrolState();
+        runAwayState = new RunAwayState();
+        distancePatrol = data.DistancePatrol;
+        speed = data.NormalSpeed;
+        chaseSpeed = data.ChaseSpeed;
+        radius = data.Radius;
+    }
+
     private void Start()
     {
         originalPosition = transform.position;
@@ -54,5 +67,14 @@ public class StateController : MonoBehaviour
     {
         animator.SetTrigger("hit");
         ChangeState(runAwayState);
+    }
+
+    public float GetChaseSpeed()
+    {
+        return chaseSpeed;
+    }
+    public float GetSpeed()
+    {
+        return speed;
     }
 }

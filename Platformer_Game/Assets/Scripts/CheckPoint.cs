@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheckPoint : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class CheckPoint : MonoBehaviour
     [SerializeField] private GameObject cupPrefab;
     [SerializeField] private Transform cupPlace;
     private bool check = false;
+    private const string SOUNDNAME = "Win";
 
     private void Start()
     {
@@ -41,6 +43,12 @@ public class CheckPoint : MonoBehaviour
             {
                 InstantiateCup();
             }
+            MapData data = new MapData(SceneManager.GetActiveScene().buildIndex - 3, 
+                                        cupCount,
+                                        true);
+            SaveManager.SaveData(data);
+            SoundManager.Instance.PlaySound(SOUNDNAME);
+            Time.timeScale = 0;
         }
     }
 

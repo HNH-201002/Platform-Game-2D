@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +24,11 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
+    public void ReloadRegisterFoodGenerator()
+    {
+        maximumFood = 0;
+        foodGenerators = new List<FoodGenerator>();
+    }
     public void RegisterFoodGenerator(FoodGenerator generator)
     {
         if (!foodGenerators.Contains(generator))
@@ -34,5 +41,22 @@ public class GameManager : MonoBehaviour
     {
         int cup = Mathf.FloorToInt(foodPlayerEarn / maximumFood * 3);
         return cup == 0 ? 1 : cup;
+    }
+    // use for button event
+    private void OnEnable()
+    {
+        Health.OnPlayerDied += ReloadRegisterFoodGenerator;
+        SceneManager.sceneLoaded += ReloadRegisterFoodGenerator;
+    }
+
+    private void ReloadRegisterFoodGenerator(Scene arg0, LoadSceneMode arg1)
+    {
+        ReloadRegisterFoodGenerator();
+    }
+
+    private void OnDisable()
+    {
+        Health.OnPlayerDied -= ReloadRegisterFoodGenerator;
+        SceneManager.sceneLoaded -= ReloadRegisterFoodGenerator;
     }
 }
