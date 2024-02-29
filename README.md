@@ -1,4 +1,4 @@
-![image](https://github.com/kingdomx01/Platform-Game-2D/assets/51502661/02a2c3b1-225c-400e-9b2e-712c5eb2ca88)# Name:  Blue Guy Adventure.
+# Name:  Blue Guy Adventure.
 ## Beta Version: 
 ###PC
 ###Android :
