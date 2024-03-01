@@ -1,27 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    public GameObject hitCheckPoint; // The object through which the isGrounded check is performed.
-    public float hitCheckRadius; // isGrounded check radius.
-    public LayerMask hitLayer; // Layer wich the character can jump on.
-    private void OnTriggerEnter2D(Collider2D collision)
+    public GameObject hitCheckPoint;
+    public LayerMask hitLayers; 
+    public float castWidth;
+    public float castHeight;
+
+    private void Update()
     {
-        if (collision.tag == "HitPoint")
+        CheckForHits();
+    }
+
+    private void CheckForHits()
+    {
+        Vector2 point = new Vector2(hitCheckPoint.transform.position.x, hitCheckPoint.transform.position.y);
+        Vector2 size = new Vector2(castWidth, castHeight);
+        float angle = 0f; 
+        Vector2 direction = Vector2.right; 
+        float distance = 0f; 
+
+        RaycastHit2D hit = Physics2D.BoxCast(point, size, angle, direction, distance, hitLayers);
+        if (hit.collider != null)
         {
-            if (collision.GetComponentInParent<StateController>() != null)
+            if (hit.collider.GetComponentInParent<StateController>() != null)
             {
-                collision.GetComponentInParent<StateController>().Hurt();
+                hit.collider.GetComponentInParent<StateController>().Hurt();
             }
-            else
+            else if (hit.collider.GetComponentInParent<Plant>() != null)
             {
-                collision.GetComponentInParent<Plant>().Hurt();
+                hit.collider.GetComponentInParent<Plant>().Hurt();
             }
-            collision.GetComponentInParent<HealthEnemy>().Hurt();
+            hit.collider.GetComponentInParent<HealthEnemy>().Hurt();
             GetComponentInParent<Movement>().Attack();
+        }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (hitCheckPoint != null)
+        {
+            // Set the color of the Gizmo
+            Gizmos.color = Color.red;
+
+            // Calculate the BoxCast parameters
+            var point = new Vector2(hitCheckPoint.transform.position.x, hitCheckPoint.transform.position.y);
+            var size = new Vector2(castWidth, castHeight);
+            var matrix = Matrix4x4.TRS(hitCheckPoint.transform.position, hitCheckPoint.transform.rotation, hitCheckPoint.transform.lossyScale);
+
+            // Draw the BoxCast with the calculated parameters
+            Gizmos.matrix = matrix;
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(size.x, size.y, 0.01f));
         }
     }
 }

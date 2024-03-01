@@ -1054,6 +1054,53 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7015999092851505139, guid: 874fe524bb148c240a08d040e565ed61, type: 3}
   m_PrefabInstance: {fileID: 1526066652}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &194168500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 194168501}
+  - component: {fileID: 194168502}
+  m_Layer: 0
+  m_Name: Food_Collectable (10)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &194168501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194168500}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.09, y: -4.55, z: -0.21201234}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1787096538}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &194168502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194168500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 6
+  height: 1
+  foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1 &212882285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1933,7 +1980,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467502200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 93.4, y: -2.65, z: -0.21201234}
+  m_LocalPosition: {x: 88.88, y: -2.65, z: -0.21201234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1952,7 +1999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 2
+  width: 4
   height: 2
   foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1001 &470785556
@@ -2142,6 +2189,53 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.1187897, y: 2.0882313}
   m_EdgeRadius: 0
+--- !u!1 &489877797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 489877798}
+  - component: {fileID: 489877799}
+  m_Layer: 0
+  m_Name: Food_Collectable (9)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &489877798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489877797}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.76, y: -4.55, z: -0.21201234}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1787096538}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &489877799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489877797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 7
+  height: 1
+  foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1001 &497894207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4756,7 +4850,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1203656140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 23.5, y: 4.83, z: -0.21201234}
+  m_LocalPosition: {x: 22.15, y: 7.78, z: -0.21201234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4775,8 +4869,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 4
-  height: 4
+  width: 3
+  height: 3
   foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1001 &1223571762
 PrefabInstance:
@@ -5073,6 +5167,53 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.9441643, y: 0.99999976}
   m_EdgeRadius: 0
+--- !u!1 &1324312700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1324312701}
+  - component: {fileID: 1324312702}
+  m_Layer: 0
+  m_Name: Food_Collectable (11)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1324312701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324312700}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 37.2, y: -4.55, z: -0.21201234}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1787096538}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1324312702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324312700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 6
+  height: 1
+  foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1 &1334098762
 GameObject:
   m_ObjectHideFlags: 0
@@ -15698,10 +15839,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 749251756}
     - target: {fileID: 3203667874761773769, guid: e1651eaa1ecc643438a77d9fa0c68907, type: 3}
-      propertyPath: respawnPos.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3203667874761773769, guid: e1651eaa1ecc643438a77d9fa0c68907, type: 3}
       propertyPath: respawnPos.Array.data[0]
       value: 
       objectReference: {fileID: 14401995}
@@ -15709,10 +15846,6 @@ PrefabInstance:
       propertyPath: respawnPos.Array.data[1]
       value: 
       objectReference: {fileID: 1838632176}
-    - target: {fileID: 3203667874761773769, guid: e1651eaa1ecc643438a77d9fa0c68907, type: 3}
-      propertyPath: respawnPos.Array.data[2]
-      value: 
-      objectReference: {fileID: 1986076397}
     - target: {fileID: 3203667874761773771, guid: e1651eaa1ecc643438a77d9fa0c68907, type: 3}
       propertyPath: sprites.Array.data[0]
       value: 
@@ -16219,6 +16352,10 @@ Transform:
   - {fileID: 678837768}
   - {fileID: 864624572}
   - {fileID: 467502201}
+  - {fileID: 489877798}
+  - {fileID: 194168501}
+  - {fileID: 1324312701}
+  - {fileID: 2075296082}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17260,6 +17397,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2316328016006258131, guid: 7f26c56636e31e44aa76ebd79cf3aa72, type: 3}
   m_PrefabInstance: {fileID: 2058400452}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2075296081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2075296082}
+  - component: {fileID: 2075296083}
+  m_Layer: 0
+  m_Name: Food_Collectable (12)
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2075296082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075296081}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 50.89, y: -2.15, z: -0.21201234}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1787096538}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2075296083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075296081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532a9c11d16169840a1053ad6aea5d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 8
+  height: 1
+  foodPrefab: {fileID: 7912979769280548544, guid: 40a4b283ca2a9b64b9493ec6398ffe65, type: 3}
 --- !u!1 &2086754270
 GameObject:
   m_ObjectHideFlags: 0

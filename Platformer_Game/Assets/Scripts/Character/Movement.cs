@@ -24,13 +24,13 @@ public class Movement : MonoBehaviour
 
     public CharacterAction playerInput;
 
-    private float lastJumpTime;
-
-    private bool jumpRequested;
     private bool canDoubleJump = false;
     const string jumpSoundName = "Jump";
     const string doubleJumpSoundName = "DoubleJump";
     private bool isPlayerDied;
+
+    private float jumpGracePeriod = 0.2f; // Grace period of 0.2 seconds after leaving the ground
+    private bool isGracePeriodActive = false; // Indicates if the grace period is active
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -48,9 +48,11 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         if (isPlayerDied) return;
+
+        // Check if the jump input is triggered and if jumping is allowed
         if (playerInput.move.Jump.triggered)
         {
-            if (isGrounded)
+            if (isGrounded || isGracePeriodActive)
             {
                 Jump();
             }
@@ -96,18 +98,28 @@ public class Movement : MonoBehaviour
         body.velocity = new Vector2(body.velocity.x, jumpForce);
         isGrounded = false;
         canDoubleJump = true; // Allow double jump after initial jump
-        lastJumpTime = Time.time;
         animator?.SetTrigger("jump"); // Optional: Trigger jump animation
     }
 
     private void CheckGrounded()
     {
+        bool wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, groundLayer);
-        if (isGrounded)
+
+        // If the player just left the ground, start the grace period timer
+        if (wasGrounded && !isGrounded)
         {
-            StartCoroutine(ResetJumpsAfterDelay());
+            StartCoroutine(JumpGracePeriod());
+        }
+        else if (isGrounded)
+        {
+            // If the player is grounded, cancel the grace period and reset jumps
+            StopAllCoroutines();
+            isGracePeriodActive = false;
+            jumpsRemaining = MaxJumps;
         }
     }
+
     private void DoubleJump()
     {
         SoundManager.Instance.PlaySound(doubleJumpSoundName);
@@ -115,13 +127,14 @@ public class Movement : MonoBehaviour
         body.velocity = new Vector2(body.velocity.x, jumpForce * doubleJumpMultiplier);
         canDoubleJump = false; // Disable double jump until grounded again
         jumpsRemaining--; // Decrement the jumps remaining
-        lastJumpTime = Time.time;
     }
 
-    private IEnumerator ResetJumpsAfterDelay()
+    private IEnumerator JumpGracePeriod()
     {
-        yield return new WaitForSeconds(0.1f); // Small delay before resetting jumps
-        jumpsRemaining = MaxJumps; // Reset the jumps remaining
+        // Activate grace period and wait for the specified duration
+        isGracePeriodActive = true;
+        yield return new WaitForSeconds(jumpGracePeriod);
+        isGracePeriodActive = false;
     }
 
     private bool IsObstacle(float horizontalInput)

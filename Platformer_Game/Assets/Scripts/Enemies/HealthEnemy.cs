@@ -64,6 +64,7 @@ public class HealthEnemy : MonoBehaviour
     {
         if(GetComponent<StateController>() != null) { GetComponent<StateController>().enabled = false; }
         GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<Collider2D>().enabled = false;
         GetComponent<Animator>().SetBool("Die",true);
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
@@ -75,7 +76,7 @@ public class HealthEnemy : MonoBehaviour
             float rotationAmount = 20f; 
             rb.angularVelocity = rotationAmount;
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
     }
 }

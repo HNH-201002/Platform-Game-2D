@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2316328014631174980}
   - component: {fileID: 2316328014631174983}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Hitpoint
   m_TagString: HitPoint
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2316328014631174981}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.093, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,7 +76,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.084031105, y: 1.0631182}
+  m_Offset: {x: -0.14876556, y: 1.0739536}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -87,7 +87,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.7845402, y: 0.13069916}
+  m_Size: {x: 1.9140091, y: 0.23328727}
   m_EdgeRadius: 0
 --- !u!1 &2316328016006258136
 GameObject:
@@ -132,7 +132,7 @@ Transform:
   - {fileID: 2316328014631174980}
   - {fileID: 2316328016502425017}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2316328016006258128
 SpriteRenderer:
@@ -327,6 +327,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset1: {x: 0, y: 0, z: 0}
+  boxCastSize: {x: 1, y: 1}
+  boxCastDistance: 2
+  boxCastAngle: 0
 --- !u!114 &5486353763032102988
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,11 @@ public class UIManager : MonoBehaviour
     }
     public void HandleAfterPlayerDied()
     {
+        StartCoroutine(DelayPanel());
+    }
+    private IEnumerator DelayPanel()
+    {
+        yield return new WaitForSeconds(0.4f);
         diedPanel.SetActive(true);
     }
 }

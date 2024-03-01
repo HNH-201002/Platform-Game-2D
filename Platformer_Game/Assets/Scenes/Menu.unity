@@ -2659,7 +2659,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10
+  m_text: '0000
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3632,7 +3634,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2afe8a5cc9d76854b9d66de3839815e6, type: 3}
   - {fileID: 8300000, guid: 4c4c841a580d6a24e98023a49bcaa97c, type: 3}
   - {fileID: 8300000, guid: da404cf7d9400fc4ebbaffad3cc727ba, type: 3}
-  - {fileID: 8300000, guid: 3142843a33ea2e8449eece95a308dc37, type: 3}
+  - {fileID: 8300000, guid: ef7a9ba277c5710468e269c231bb3eca, type: 3}
   - {fileID: 8300000, guid: 7d7f32ae0fddc39489b1eda118f86886, type: 3}
   audioMixer: {fileID: -531422028705139603, guid: 82bfaf408ef028846b2154a5afb322c1, type: 2}
   audioSFX: {fileID: 2028449766}
