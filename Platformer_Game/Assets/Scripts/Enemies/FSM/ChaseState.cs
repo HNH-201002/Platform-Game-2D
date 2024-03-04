@@ -3,6 +3,7 @@
 
 public class ChaseState : MonoBehaviour, IState 
 {
+    private readonly int _speedHash = Animator.StringToHash("speed");
     EnemyBase enemy;
     public void OnEnter(StateController state)
     {
@@ -30,13 +31,13 @@ public class ChaseState : MonoBehaviour, IState
         {
             if (Mathf.Abs(hitPlayer.transform.position.x - state.transform.position.x) <= 1.9f) 
             {
-                state.animator.SetFloat("speed", 0);
+                state.animator.SetFloat(_speedHash, 0);
                 return;
             }
             Vector2 direction = (hitPlayer.transform.position - state.transform.position).normalized;
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             enemy.ChaseTarget(targetAngle);
-            state.animator.SetFloat("speed", state.GetChaseSpeed());
+            state.animator.SetFloat(_speedHash, state.GetChaseSpeed());
             if (direction.x > 0)
             {
                 state.transform.eulerAngles = new Vector3(state.transform.eulerAngles.x, 180, state.transform.eulerAngles.z);

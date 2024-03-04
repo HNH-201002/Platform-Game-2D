@@ -9,8 +9,6 @@ public class UIController : MonoBehaviour
     public const string soundTap = "Tap";
     public const string soundRespawn = "Respawn";
     public string menuScreenName;
-    private bool isFirstTime;
-
     public void TurnOffPanel()
     {
         SoundManager.Instance.PlaySound(soundTap);

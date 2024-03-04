@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Fire : MonoBehaviour
@@ -9,10 +7,7 @@ public class Fire : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        if(fireObject != null)
-        {
-            fireObject.SetActive(false);
-        }
+        if(fireObject != null) fireObject.SetActive(false);
     }
     public void OnCollisionEnter2D(Collision2D collision)
     {

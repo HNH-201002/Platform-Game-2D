@@ -5,10 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
-    public void SelectMap(int mapNumber)
-    {
-        StartCoroutine(LoadYourAsyncScene(mapNumber));
-    }
+    public void SelectMap(int mapNumber) => StartCoroutine(LoadYourAsyncScene(mapNumber));
     IEnumerator LoadYourAsyncScene(int mapNumber)
     {
 

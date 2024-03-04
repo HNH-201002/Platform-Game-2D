@@ -8,9 +8,13 @@ public class Plant : MonoBehaviour
     [SerializeField] private Vector3 position;
     [SerializeField] private float radius;
     [SerializeField] private LayerMask playerLayerMask;
-    [SerializeField] private float shotDelay = 1.0f; // Delay between shots
+    [SerializeField] private float shotDelay = 1.0f;
     private Animator animator;
-    private bool canShoot = true; // Whether the plant can shoot again
+    private bool canShoot = true;
+
+    private readonly int _hitAniHash = Animator.StringToHash("Hit");
+    private readonly int _attackAniHash = Animator.StringToHash("Attack");
+
     enum DirectionShoot
     {
         Left,
@@ -44,29 +48,23 @@ public class Plant : MonoBehaviour
 
     IEnumerator Shoot(Vector2 targetPosition)
     {
-        canShoot = false; // Disable shooting
+        canShoot = false;
 
         GameObject bulletObject = Instantiate(bulletPrefab,shootPoint.position, Quaternion.identity);
         Vector2 direction = DirectionShoot.Right == directionShoot ? Vector2.right : Vector2.left;
-        bulletObject.GetComponent<Bullet>().direction = direction; // Set the direction for the bullet
+        bulletObject.GetComponent<Bullet>().direction = direction;
 
-        animator.SetTrigger("Attack");
-        Destroy(bulletObject, 2); // Adjust the time before destroying the bullet if needed
+        animator.SetTrigger(_attackAniHash);
+        Destroy(bulletObject, 2);
 
-        yield return new WaitForSeconds(shotDelay); // Wait for the delay
+        yield return new WaitForSeconds(shotDelay);
 
-        canShoot = true; // Enable shooting again
+        canShoot = true;
     }
     void OnDrawGizmos()
     {
-        // Set the Gizmo color to a color of your choice, e.g., red with some transparency
         Gizmos.color = new Color(1, 0, 0, 0.5f);
-
-        // Draw the OverlapCircle as a sphere Gizmo
         Gizmos.DrawWireSphere(transform.position + position, radius);
     }
-    public void Hurt()
-    {
-        animator.SetTrigger("Hit");
-    }
+    public void Hurt() => animator.SetTrigger(_hitAniHash);
 }

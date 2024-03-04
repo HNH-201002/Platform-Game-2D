@@ -11,11 +11,13 @@ public class HealthEnemy : MonoBehaviour
 
     private List<GameObject> gameObjects = new List<GameObject>();
     private float countdown;
-    private const float HeartSpacing = 0.8f; // Spacing between hearts
-    private const float OffsetForTwo = 0.5f; // Additional offset when there are two hearts
-    private const float HurtCooldown = 0.2f; // Cooldown duration after getting hurt
+    private const float HeartSpacing = 0.8f; 
+    private const float OffsetForTwo = 0.5f; 
+    private const float HurtCooldown = 0.2f; 
     private const string SOUNDNAME = "Hurt_Enemy";
     public static Action OnEnemyDied;
+
+    private readonly int _dieAniHash = Animator.StringToHash("Die");
     void Start()
     {
         Vector2 startPosition = healthPoint.transform.position;
@@ -31,10 +33,7 @@ public class HealthEnemy : MonoBehaviour
 
     void Update()
     {
-        if (countdown > 0)
-        {
-            countdown -= Time.deltaTime;
-        }
+        if (countdown > 0) countdown -= Time.deltaTime;
     }
 
     public void Hurt()
@@ -62,21 +61,41 @@ public class HealthEnemy : MonoBehaviour
     }
     private IEnumerator DelayBeforeDestroyObject()
     {
-        if(GetComponent<StateController>() != null) { GetComponent<StateController>().enabled = false; }
-        GetComponent<Collider2D>().enabled = false;
-        GetComponentInChildren<Collider2D>().enabled = false;
-        GetComponent<Animator>().SetBool("Die",true);
+        StateController stateController = GetComponent<StateController>();
+        if (stateController != null)
+        {
+            stateController.enabled = false;
+        }
+
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = false;
+        }
+
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetBool(_dieAniHash, true);
+        }
+
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            // Add a small upward force to make the object jump
-            float jumpForce = 200f; // Adjust the force as needed
-            rb.AddForce(new Vector2(0, jumpForce));
-            rb.constraints = RigidbodyConstraints2D.None;
-            float rotationAmount = 20f; 
-            rb.angularVelocity = rotationAmount;
+            ApplyRigidbodyEffects(rb);
         }
+
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
+    }
+
+    private void ApplyRigidbodyEffects(Rigidbody2D rb)
+    {
+        float jumpForce = 200f;
+        rb.AddForce(new Vector2(0, jumpForce));
+
+        rb.constraints = RigidbodyConstraints2D.None;
+        float rotationAmount = 20f;
+        rb.angularVelocity = rotationAmount;
     }
 }

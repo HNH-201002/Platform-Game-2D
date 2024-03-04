@@ -9,6 +9,8 @@ public class StateController : MonoBehaviour
     }
     IState currentState;
 
+    private readonly int _hitAniHash = Animator.StringToHash("hit");
+
     [SerializeField] private EnemySO data;
     private float speed;
     private float chaseSpeed;
@@ -65,7 +67,7 @@ public class StateController : MonoBehaviour
     }
     public void Hurt()
     {
-        animator.SetTrigger("hit");
+        animator.SetTrigger(_hitAniHash);
         ChangeState(runAwayState);
     }
 

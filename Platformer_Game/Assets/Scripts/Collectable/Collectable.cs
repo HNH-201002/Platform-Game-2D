@@ -6,6 +6,7 @@ public class Collectable : MonoBehaviour
     public float delayBeforeDestroy = 0.4f;
     Collider2D collectableCollider;
     Animator ani;
+    private readonly int destroyAniHash = Animator.StringToHash("Destroy");
     public void Start()
     {
         ani = GetComponent<Animator>(); 
@@ -24,10 +25,8 @@ public class Collectable : MonoBehaviour
 
     private IEnumerator DestroyAfterDelay()
     {
-        ani.SetTrigger("Destroy");
+        ani.SetTrigger(destroyAniHash);
         yield return new WaitForSeconds(delayBeforeDestroy);
-
-        // Then destroy the object
         Destroy(gameObject);
     }
 }

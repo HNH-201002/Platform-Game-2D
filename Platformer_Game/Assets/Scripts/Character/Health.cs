@@ -16,19 +16,18 @@ public class Health : MonoBehaviour
     private const string EnemyTag = "Enemy";
     private const string SOUND_HURT_NAME = "Hurt";
     private const string SOUND_DIED_NAME = "Died";
+
+    private readonly int hurtHash = Animator.StringToHash("hurt"); 
     private float countdown;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        health = sprites.Count; // Assuming the initial health is equal to the number of sprites
+        health = sprites.Count; 
     }
     public void Update()
     {
-        if (countdown >= 0)
-        {
-            countdown -= Time.deltaTime;
-        }
+        if (countdown >= 0) countdown -= Time.deltaTime;
     }
 
     public void Hurt()
@@ -40,7 +39,7 @@ public class Health : MonoBehaviour
         {
             sprites[health].enabled = false;
         }
-        animator.SetTrigger("hurt");
+        animator.SetTrigger(hurtHash);
         countdown = hurtCooldown;
         SoundManager.Instance.PlaySound(SOUND_HURT_NAME);
 
@@ -50,10 +49,7 @@ public class Health : MonoBehaviour
             return;
         }
     }
-    private void Die()
-    {
-        StartCoroutine(DieWithDelay());
-    }
+    private void Die() => StartCoroutine(DieWithDelay());
 
     private IEnumerator DieWithDelay()
     {

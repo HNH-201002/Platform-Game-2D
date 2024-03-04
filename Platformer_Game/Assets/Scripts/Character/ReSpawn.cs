@@ -5,14 +5,18 @@ public class ReSpawn : MonoBehaviour
 {
     [SerializeField] private float limitedPosY;
     [SerializeField] private List<Transform> respawnPos;
-
+    private Health health;
+    private void Start()
+    {
+        health = GetComponent<Health>();
+    }
     private void Update()
     {
         if (transform.position.y < limitedPosY)
         {
             Transform closestRespawnPoint = GetClosestRespawnPoint();
             RespawnAtPoint(closestRespawnPoint);
-            transform.GetComponent<Health>().Hurt();
+            health.Hurt();
         }
     }
 

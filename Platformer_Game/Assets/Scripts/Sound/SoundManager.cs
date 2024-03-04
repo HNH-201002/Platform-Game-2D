@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
-using static Unity.VisualScripting.Member;
+
 
 public class SoundManager : MonoBehaviour
 {
@@ -13,7 +12,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioMixerGroup audioMixer;
     [SerializeField] private AudioSource audioSFX;
     [SerializeField] private AudioSource audioSound;
-    // Mapping of scene names to background sound names
     private Dictionary<string, string> sceneToBackgroundSound = new Dictionary<string, string>
     {
         {"M_1", "M_BG"},
@@ -29,14 +27,12 @@ public class SoundManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Initialize the dictionary with audio clips
             foreach (var clip in clips)
             {
                 clipsDictionary.Add(clip.name, clip);
             }
-            audioSound.loop = true; // Enable looping
+            audioSound.loop = true; 
 
-            // Subscribe to the scene loaded event
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
@@ -48,7 +44,6 @@ public class SoundManager : MonoBehaviour
     {
         if (clipsDictionary.TryGetValue(clipName, out AudioClip clip))
         {
-            //source.outputAudioMixerGroup = audioMixer;
             audioSFX.clip = clip;
             audioSFX.loop = loop;
             audioSFX.Play();
@@ -68,7 +63,6 @@ public class SoundManager : MonoBehaviour
         else
         {
             Debug.LogWarning("No background sound mapping found for scene: " + scene.name);
-            // Optionally, play a default background sound if no mapping is found
         }
     }
 
@@ -76,7 +70,7 @@ public class SoundManager : MonoBehaviour
     {
         if (clipsDictionary.TryGetValue(backgroundSoundName, out AudioClip clip))
         {
-            if (audioSound.clip != clip) // Only swap and play the clip if it's different
+            if (audioSound.clip != clip)
             {
                 audioSound.clip = clip;
                 audioSound.Play();
@@ -89,9 +83,5 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    private void OnDestroy()
-    {
-        // Unsubscribe from the scene loaded event to prevent memory leaks
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+    private void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoaded;
 }

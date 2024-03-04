@@ -4,8 +4,6 @@ public abstract class EnemyBase : MonoBehaviour
 {
     protected StateController state;
     protected Animator animator;
-
-    // Common methods for all enemies
     public abstract void ChaseTarget(float targetAngle);
 
     public abstract void RunAway();

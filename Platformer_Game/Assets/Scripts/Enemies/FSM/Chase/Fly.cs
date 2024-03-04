@@ -21,13 +21,11 @@ public class Fly : EnemyBase
     {
         if (timer > 0)
         {
-            // Run away in the specified direction
             state.body.position = Vector3.MoveTowards(state.body.position, state.body.position + Vector2.right * 2, state.GetSpeed() * Time.deltaTime);
             timer -= Time.deltaTime;
         }
         else
         {
-            // Time is up, transition to another state, e.g., patrol
             state.ChangeState(state.patrolState);
             timer = 1f;
         }

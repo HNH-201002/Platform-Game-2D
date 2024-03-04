@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
@@ -41,15 +39,10 @@ public class Attack : MonoBehaviour
     {
         if (hitCheckPoint != null)
         {
-            // Set the color of the Gizmo
             Gizmos.color = Color.red;
-
-            // Calculate the BoxCast parameters
             var point = new Vector2(hitCheckPoint.transform.position.x, hitCheckPoint.transform.position.y);
             var size = new Vector2(castWidth, castHeight);
             var matrix = Matrix4x4.TRS(hitCheckPoint.transform.position, hitCheckPoint.transform.rotation, hitCheckPoint.transform.lossyScale);
-
-            // Draw the BoxCast with the calculated parameters
             Gizmos.matrix = matrix;
             Gizmos.DrawWireCube(Vector3.zero, new Vector3(size.x, size.y, 0.01f));
         }

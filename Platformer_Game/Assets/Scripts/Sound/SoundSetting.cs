@@ -10,14 +10,10 @@ public class SoundSetting : MonoBehaviour
 
     private const string MUSIC_VOLUME_PREF = "MusicVolume";
     private const string SFX_VOLUME_PREF = "SFXVolume";
-
     public void Start()
     {
-        // Load the volume settings
         soundSlider.value = PlayerPrefs.GetFloat(MUSIC_VOLUME_PREF, 0.75f);
         sfxSlider.value = PlayerPrefs.GetFloat(SFX_VOLUME_PREF, 0.75f);
-
-        // Apply the loaded settings
         VolumeSetting();
         VolumeSfxSetting();
     }
@@ -29,7 +25,6 @@ public class SoundSetting : MonoBehaviour
             float volume = soundSlider.value;
             mixer.SetFloat("Music", Mathf.Log10(volume) * 20);
 
-            // Save the volume setting
             PlayerPrefs.SetFloat(MUSIC_VOLUME_PREF, volume);
         }
     }
@@ -40,8 +35,6 @@ public class SoundSetting : MonoBehaviour
         {
             float volume = sfxSlider.value;
             mixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
-
-            // Save the SFX volume setting
             PlayerPrefs.SetFloat(SFX_VOLUME_PREF, volume);
         }
     }

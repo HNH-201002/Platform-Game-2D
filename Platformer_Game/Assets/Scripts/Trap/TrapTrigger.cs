@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TrapTrigger : MonoBehaviour
 {
@@ -8,10 +6,7 @@ public class TrapTrigger : MonoBehaviour
 
     void Update()
     {
-        if (countdown > 0)
-        {
-            countdown -= Time.deltaTime;
-        }
+        if (countdown > 0) countdown -= Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D other)

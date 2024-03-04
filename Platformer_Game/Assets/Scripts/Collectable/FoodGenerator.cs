@@ -1,18 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class FoodGenerator : MonoBehaviour
 {
-    [SerializeField] private int width; // amount of food horizontally
-    [SerializeField] private int height; // amount of food vertically
+    [SerializeField] private int width; 
+    [SerializeField] private int height;
     [SerializeField] private GameObject foodPrefab;
 
     void Start()
     {
         GameManager.Instance.RegisterFoodGenerator(this);
-        GenerateFoodGrid();
+        StartCoroutine(GenerateFoodGrid());
     }
-
-    private void GenerateFoodGrid()
+     
+    private IEnumerator GenerateFoodGrid()
     {
         int halfWidth = width / 2;
         int halfHeight = height / 2;
@@ -27,6 +28,7 @@ public class FoodGenerator : MonoBehaviour
                 Vector3 positionOffset = new Vector3(j, i, 0);
                 GameObject gameObj = Instantiate(foodPrefab, transform.position + positionOffset, Quaternion.identity);
                 gameObj.transform.SetParent(transform);
+                yield return null;
             }
         }
     }

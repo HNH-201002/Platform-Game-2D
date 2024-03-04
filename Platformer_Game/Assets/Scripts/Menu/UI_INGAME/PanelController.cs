@@ -5,10 +5,7 @@ public class PanelController : MonoBehaviour
     [SerializeField] private GameObject panel;
     const string soundTap = "Tap";
     private static bool isPaused = false;
-    public void Start()
-    {
-        Time.timeScale = 1;
-    }
+    private void Start() => Time.timeScale = 1;
     public void ButtonEvent()
     {
         isPaused = !isPaused;

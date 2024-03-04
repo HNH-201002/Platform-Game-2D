@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -10,7 +9,6 @@ public class MapData
     public int cupCount;
     public bool isUnlocked;
 
-    // Constructor for easy initialization
     public MapData(int number, int cups, bool unlocked)
     {
         mapNumber = number;
@@ -18,16 +16,14 @@ public class MapData
         isUnlocked = unlocked;
     }
 }
-[System.Serializable] // Serializable the data we will save 
+[System.Serializable] 
 public class MapDataListWrapper
 {
     public List<MapData> mapDataList;
 }
 public class GameData
 {
-    public Dictionary<int,MapData> maps; // List to store data for multiple maps
-
-    // Constructor to ensure the list is initialized
+    public Dictionary<int,MapData> maps; 
     public GameData()
     {
         maps = new Dictionary<int, MapData>();

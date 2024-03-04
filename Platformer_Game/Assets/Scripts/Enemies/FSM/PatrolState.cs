@@ -11,8 +11,8 @@ public class PatrolState : MonoBehaviour,IState
     private bool isFlipping;
     private float lastFlipTime;
     private float flipCooldown = 0.5f;
-    public Vector2 boxCastSize = new Vector2(1f, 1f); // Default size of the box cast
-    public float boxCastDistance = 2f; // Default distance for the box cast
+    public Vector2 boxCastSize = new Vector2(1f, 1f); 
+    public float boxCastDistance = 2f; 
     public float boxCastAngle = 0f;
     public void OnEnter(StateController state)
     {
@@ -27,12 +27,12 @@ public class PatrolState : MonoBehaviour,IState
         Vector2 direction = isFacing ? Vector2.left : Vector2.right;
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(state.transform.position, state.radius, state.playerLayer);
         RaycastHit2D hit = Physics2D.BoxCast(
-           state.transform.position + offset1, // Center of the box
-           boxCastSize, // Size of the box
-           boxCastAngle, // Angle of the box (in degrees)
-           direction, // Direction to cast the box
-           boxCastDistance, // Distance to cast the box
-           state.obstacleLayer // LayerMask to detect obstacles
+           state.transform.position + offset1, 
+           boxCastSize,
+           boxCastAngle,
+           direction, 
+           boxCastDistance, 
+           state.obstacleLayer 
        );
 
         if (!isFlipping)

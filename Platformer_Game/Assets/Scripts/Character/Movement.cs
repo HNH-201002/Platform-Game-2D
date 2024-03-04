@@ -3,12 +3,18 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float runSpeed = 0.6f;
-    public float jumpForce = 2.6f;
-    public float doubleJumpMultiplier;
+    private readonly int _jumpRemainingHash = Animator.StringToHash("jumpsRemaining");
+    private readonly int _jumpAniHash = Animator.StringToHash("jump");
+    private readonly int _doubleJumpHash = Animator.StringToHash("doubleJump");
+    private readonly int _groundHash = Animator.StringToHash("isGrounded");
+    private readonly int _speedHash = Animator.StringToHash("speed");
+
+    [SerializeField] private float runSpeed = 0.6f;
+    [SerializeField] private float jumpForce = 2.6f;
+    [SerializeField] private float doubleJumpMultiplier;
 
     private Rigidbody2D body;
-    private Animator animator; // Optional: Use only if animations are present
+    private Animator animator;
 
     private bool isGrounded;
     public Transform groundCheckPoint;
@@ -25,16 +31,16 @@ public class Movement : MonoBehaviour
     public CharacterAction playerInput;
 
     private bool canDoubleJump = false;
-    const string jumpSoundName = "Jump";
-    const string doubleJumpSoundName = "DoubleJump";
+    const string JUMP_SOUND_NAME = "Jump";
+    const string Double_JUMP_SOUND_NAME = "DoubleJump";
     private bool isPlayerDied;
 
-    private float jumpGracePeriod = 0.2f; // Grace period of 0.2 seconds after leaving the ground
-    private bool isGracePeriodActive = false; // Indicates if the grace period is active
+    private float jumpGracePeriod = 0.2f;
+    private bool isGracePeriodActive = false; 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>(); // Optional: Use only if animations are present
+        animator = GetComponent<Animator>(); 
         playerInput = new CharacterAction();
     }
 
@@ -42,14 +48,13 @@ public class Movement : MonoBehaviour
     {
         jumpsRemaining = MaxJumps;
         Health.OnPlayerDied += PlayerDied;
-        if (animator) animator.SetInteger("jumpsRemaining", jumpsRemaining);
+        if (animator) animator.SetInteger(_jumpRemainingHash, jumpsRemaining);
     }
 
     private void Update()
     {
         if (isPlayerDied) return;
 
-        // Check if the jump input is triggered and if jumping is allowed
         if (playerInput.move.Jump.triggered)
         {
             if (isGrounded || isGracePeriodActive)
@@ -72,7 +77,6 @@ public class Movement : MonoBehaviour
     private void Move()
     {
         Vector2 horizontalInput = playerInput.move.Movement.ReadValue<Vector2>();
-        // Check if player is grounded and if there's an obstacle in front
         if (!IsObstacle(horizontalInput.x))
         {
             body.velocity = new Vector2(runSpeed * horizontalInput.x, body.velocity.y);
@@ -81,12 +85,10 @@ public class Movement : MonoBehaviour
                 transform.localScale = new Vector3(horizontalInput.x < 0 ? -1 : 1, 1, 1);
             }
         }
-
-        // Optional: Update animator parameters
         if (animator)
         {
-            animator.SetBool("isGrounded", isGrounded);
-            animator.SetFloat("speed", Mathf.Abs(body.velocity.x));
+            animator.SetBool(_groundHash, isGrounded);
+            animator.SetFloat(_speedHash, Mathf.Abs(body.velocity.x));
         }
     }
 
@@ -94,11 +96,11 @@ public class Movement : MonoBehaviour
 
     private void Jump()
     {
-        SoundManager.Instance.PlaySound(jumpSoundName);
+        SoundManager.Instance.PlaySound(JUMP_SOUND_NAME);
         body.velocity = new Vector2(body.velocity.x, jumpForce);
         isGrounded = false;
-        canDoubleJump = true; // Allow double jump after initial jump
-        animator?.SetTrigger("jump"); // Optional: Trigger jump animation
+        canDoubleJump = true; 
+        animator?.SetTrigger(_jumpAniHash); 
     }
 
     private void CheckGrounded()
@@ -106,14 +108,12 @@ public class Movement : MonoBehaviour
         bool wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, groundLayer);
 
-        // If the player just left the ground, start the grace period timer
         if (wasGrounded && !isGrounded)
         {
             StartCoroutine(JumpGracePeriod());
         }
         else if (isGrounded)
         {
-            // If the player is grounded, cancel the grace period and reset jumps
             StopAllCoroutines();
             isGracePeriodActive = false;
             jumpsRemaining = MaxJumps;
@@ -122,16 +122,15 @@ public class Movement : MonoBehaviour
 
     private void DoubleJump()
     {
-        SoundManager.Instance.PlaySound(doubleJumpSoundName);
-        animator?.SetTrigger("doubleJump");
+        SoundManager.Instance.PlaySound(Double_JUMP_SOUND_NAME);
+        animator?.SetTrigger(_doubleJumpHash);
         body.velocity = new Vector2(body.velocity.x, jumpForce * doubleJumpMultiplier);
-        canDoubleJump = false; // Disable double jump until grounded again
-        jumpsRemaining--; // Decrement the jumps remaining
+        canDoubleJump = false;
+        jumpsRemaining--; 
     }
 
     private IEnumerator JumpGracePeriod()
     {
-        // Activate grace period and wait for the specified duration
         isGracePeriodActive = true;
         yield return new WaitForSeconds(jumpGracePeriod);
         isGracePeriodActive = false;
