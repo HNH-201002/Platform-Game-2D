@@ -1,6 +1,6 @@
 # Name:  Blue Guy Adventure.
 ## Beta Version: 
-### You can try it in here: https://kingdom01.itch.io/blue-guy-adventure
+### You can try it in here: https://smackthat.itch.io/blue-guy-adventure
 ### Special Thanks To:
 * <a href="https://pixelfrog-assets.itch.io/">Pixel Frog</a> - For Awesome Free Game Assets
 * ...
